@@ -101,7 +101,7 @@ const BuatNotes: React.FC<IBuatNotesProps> = ({ notes, setNotes }) => {
             </div>
             <label
               htmlFor="colorInput"
-              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="ml-2 text-sm font-medium text-gray-900"
             >
               Warna Notes
             </label>

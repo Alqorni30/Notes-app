@@ -1,14 +1,17 @@
+import React, { useState } from "react";
 import { Note } from "../models/note.model";
-import React from "react";
 import CardNotes from "./CardNotes";
-import {GrNotes} from 'react-icons/gr'
+import { GrNotes } from "react-icons/gr";
 
 interface INotesListProps {
   notes: Note[];
   setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
+
 }
 
 const NotesContent: React.FC<INotesListProps> = ({ notes, setNotes }) => {
+  const [editNote, setEditNote] = useState<Note | null>(null);
+
   const handleDelete = (id: string) => {
     // Menghapus catatan dari local storage
     const storedNotes = JSON.parse(localStorage.getItem("notes") || "[]");
@@ -17,19 +20,30 @@ const NotesContent: React.FC<INotesListProps> = ({ notes, setNotes }) => {
 
     // Menghapus catatan dari tampilan
     setNotes(notes.filter((note) => note.id !== id));
+
+    // Menghentikan mode edit jika sedang mengedit catatan yang dihapus
+    if (editNote && editNote.id === id) {
+      setEditNote(null);
+    }
   };
 
+  
+
   const renderNotes = (): JSX.Element[] => {
-    return notes.map((note) => {
-      return (
-        <CardNotes key={note.id} note={note} handleDelete={handleDelete} />
-      );
-    });
+    return notes.map((note) => (
+      <CardNotes
+        key={note.id}
+        note={note}
+        handleDelete={handleDelete}
+      />
+    ));
   };
 
   return (
     <>
-      <h2 className="mb-3 font-bold text-xl flex items-center gap-2"><GrNotes/> Notes</h2>
+      <h2 className="mb-3 font-bold text-xl flex items-center gap-2">
+        <GrNotes /> Notes
+      </h2>
       <div>
         <p className="ml-2 mb-2 text-base text-blue-700">
           {notes.length} Notes
@@ -39,6 +53,7 @@ const NotesContent: React.FC<INotesListProps> = ({ notes, setNotes }) => {
         ) : (
           renderNotes()
         )}
+        
       </div>
     </>
   );
